@@ -7,6 +7,8 @@ import org.magicEagle.plane.SistemaSensores;
 import org.magicEagle.states.EstadoEurofighter;
 import org.magicEagle.utils.SimLoop;
 
+import javax.swing.*;
+
 public class Main {
     public static void main(String[] args) {
 //        EstadoEurofighter estadoEurofighter = new EstadoEurofighter();;
@@ -25,7 +27,20 @@ public class Main {
 //
 //        System.out.println(radar.getObjetivo(0).name);
 //
-          SimLoop simLoop = new SimLoop();
-          simLoop.runSim();
+            JFrame window = new JFrame();
+            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            window.setLocationRelativeTo(null);
+
+            window.setResizable(false);
+            window.setTitle("Magic Eagle - Eurofighter Typhoon 1.0");
+            window.setVisible(true);
+
+            SimLoop simLoop = new SimLoop();
+            window.add(simLoop);
+            window.pack();
+            Thread simThread = new Thread(simLoop);
+            simThread.start();
+
+            simLoop.requestFocus();
     }
 }

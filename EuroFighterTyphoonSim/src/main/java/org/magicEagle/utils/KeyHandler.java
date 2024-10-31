@@ -8,7 +8,7 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
+        //not used
     }
 
     @Override
@@ -38,6 +38,10 @@ public class KeyHandler implements KeyListener {
 
         if(code == KeyEvent.VK_S) {
             downPressed = false;
+        }
+
+        if(code == KeyEvent.VK_X) {
+            closePressed = false;
         }
     }
 }

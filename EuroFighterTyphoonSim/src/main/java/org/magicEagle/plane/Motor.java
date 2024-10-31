@@ -5,17 +5,17 @@ import org.magicEagle.utils.KeyHandler;
 public class Motor {
     //utilidades
     KeyHandler keyHandler;
-    double potenciaIntervalo = 0.0001;
+    double potenciaIntervalo = 05.0;
 
     //Variables
-    float potenciaMaxima;
-    float nivelActualPotencia;
+    double potenciaMaxima;
+    double nivelActualPotencia;
     String Estado;
     float Temperatura;
-    float conmsumoCombustible;
+    double conmsumoCombustible;
 
     //Constructor
-    public Motor(float potenciaMaxima, float nivelActualPotencia, String Estado, float conmsumoCombustible, KeyHandler keyHandler) {
+    public Motor(double potenciaMaxima, double nivelActualPotencia, String Estado, double conmsumoCombustible, KeyHandler keyHandler) {
         this.potenciaMaxima = potenciaMaxima;
         this.nivelActualPotencia = nivelActualPotencia;
         this.Estado = Estado;
@@ -37,21 +37,15 @@ public class Motor {
             }
         }
     }
-
-
-
-
-
-
     //Getters y Setters
 
     //obtener maxima potencia
-    public float getpotenciaMaxima() {
+    public double getpotenciaMaxima() {
         return potenciaMaxima;
     }
 
     //obtener nivel actual de potencia
-    public float getnivelActualPotencia() {
+    public double getnivelActualPotencia() {
         return nivelActualPotencia;
     }
 
@@ -65,7 +59,11 @@ public class Motor {
         return Temperatura;
 
     }
-    public float getConmsumoCombustible() {
+    public double getConmsumoCombustible() {
         return conmsumoCombustible;
+    }
+
+    public void ajustarConsumo() {
+        this.conmsumoCombustible = (nivelActualPotencia / 300) / 325;
     }
 }
