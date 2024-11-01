@@ -1,16 +1,16 @@
 package org.magicEagle.plane;
 
-import org.magicEagle.Main.Eurofighter;
-
 import java.util.ArrayList;
+
+import org.magicEagle.Main.Eurofighter;
 
 public class Radar {
 
-    //CONSTANTES
+    // CONSTANTES
     final double alcanceMaximo = 500.00;
     final double alcanceEfectivo = 50.00;
     final String SISTEMA = "Banda X";
-    private final String [] MODOS_RADAR = {
+    private final String[] MODOS_RADAR = {
             "Standby",
             "Aire-Aire",
             "Aire-Tierra",
@@ -21,13 +21,12 @@ public class Radar {
             "Aire-Aire, Aire-Tierra y Aire-Mar"
     };
 
-
-    //Variables
+    // Variables
     private String modoDeteccion;
     private boolean estado;
     private ArrayList<Eurofighter> objectivos;
 
-    //Constructor
+    // Constructor
     public Radar(int modoDeteccion, boolean estado) {
         this.modoDeteccion = MODOS_RADAR[modoDeteccion];
         this.estado = estado;
@@ -46,11 +45,11 @@ public class Radar {
         return estado;
     }
 
-    public void addObjetivo(Eurofighter eurofighter){
+    public void addObjetivo(Eurofighter eurofighter) {
         objectivos.add(eurofighter);
     }
 
-    public Eurofighter getObjetivo(int index){
+    public Eurofighter getObjetivo(int index) {
         return objectivos.get(index);
     }
 }

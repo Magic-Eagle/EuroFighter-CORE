@@ -1,7 +1,9 @@
 package org.magicEagle.utils;
 
+import org.magicEagle.Main.Eurofighter;
 import org.magicEagle.plane.Combustible;
 import org.magicEagle.plane.Motor;
+import org.magicEagle.plane.SistemaSensores;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,10 +20,12 @@ public class SimLoop extends JPanel implements Runnable {
     public final int screenWidth = titleSize * maxScreenCol; // 768px
     public final int screenHeight = titleSize * maxScreenRow; // 576 px
 
+    Eurofighter eurofighter = new Eurofighter("Eurofighter 1","Listo para despegue");
     KeyHandler keyHandler = new KeyHandler();
-    Motor motor = new Motor(150000.0,0.0,"Encendido",0.0F,keyHandler);
-    Combustible combustible = new Combustible(5000.0,5000.0,"SAF",motor.getConmsumoCombustible());
-    Logs logs = new Logs(motor, combustible);
+    Motor motor = new Motor(150000,0,"Encendido",0,keyHandler);
+    Combustible combustible = new Combustible(5000,5000,"SAF",motor.getConmsumoCombustible());
+    SistemaSensores sistemaSensores = new SistemaSensores( 0, 0, "Sensor de Peso encendido", 0,  eurofighter, combustible, 4, motor);
+    Logs logs = new Logs(motor, combustible,sistemaSensores);
 
     public SimLoop() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -38,11 +42,15 @@ public class SimLoop extends JPanel implements Runnable {
         motor.ajustarPotencia();
         motor.ajustarConsumo();
         combustible.consumirCombustible(motor.getConmsumoCombustible());
+        sistemaSensores.obtenerPesoTotal();
+        sistemaSensores.ajustarVelocidad();
     }
 
     public void log() {
         logs.logMotor();
         logs.logsCombustible();
+        logs.logsPeso();
+        logs.logsVelocidad();
     }
 
     public void stop() {

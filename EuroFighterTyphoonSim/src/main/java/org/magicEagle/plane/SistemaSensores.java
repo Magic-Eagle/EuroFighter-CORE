@@ -1,41 +1,63 @@
 package org.magicEagle.plane;
 
-public class SistemaSensores {
-    //variables
-    float velocidad;
-    float Altitud;
-    float Presion;
-    String Estado;
-    float Temperatura;
+import org.magicEagle.Main.Eurofighter;
 
-    //Constructor
-    public SistemaSensores(float velocidad, float Altitud, float Presion, String Estado, float Temperatura) {
-        this.velocidad = velocidad;
+public class SistemaSensores {
+    Eurofighter eurofighter;
+    Combustible combustible;
+    Motor motor;
+
+    // variables
+    double velocidad;
+    double Altitud;
+    double Presion;
+    String Estado;
+    double Temperatura;
+    double pesoTotal;
+    double resistenciaAereoDinamica;
+
+    // Constructor
+    public SistemaSensores(float Altitud, float Presion, String Estado, float Temperatura, Eurofighter eurofighter,
+            Combustible combustible, double resistenciaAereoDinamica, Motor motor) {
         this.Altitud = Altitud;
         this.Presion = Presion;
         this.Estado = Estado;
         this.Temperatura = Temperatura;
+        this.eurofighter = eurofighter;
+        this.combustible = combustible;
+        this.resistenciaAereoDinamica = resistenciaAereoDinamica;
+        this.motor = motor;
     }
 
-    //Getters and Setters
+    public double obtenerPesoTotal() {
+        pesoTotal = eurofighter.PESO_DESCARGADO + combustible.getNivelActual();
+        return pesoTotal;
+    }
 
-    public float getVelocidad(){
+    public double ajustarVelocidad() {
+        double potencia = motor.nivelActualPotencia;
+        double peso = obtenerPesoTotal();
+
+        velocidad = Math.sqrt((2 * potencia) / (resistenciaAereoDinamica * peso));
         return velocidad;
+    }
+
+    public double getAltitud() {
+        return Altitud;
 
     }
-    public float getAltitud() {
-        return  Altitud;
 
-    }
-    public float getPresion() {
+    public double getPresion() {
         return Presion;
 
     }
+
     public String getEstado() {
         return Estado;
 
     }
-    public float getTemperatura() {
+
+    public double getTemperatura() {
         return Temperatura;
 
     }

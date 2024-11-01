@@ -1,13 +1,13 @@
 package org.magicEagle.plane;
 
 public class Combustible {
-    //Variables
-   double CapacidadMaxima;
-   double nivelActual;
-   String tipoCombustible;
-   double consumoPorSegundo;
+    // Variables
+    double CapacidadMaxima;
+    double nivelActual;
+    String tipoCombustible;
+    double consumoPorSegundo;
 
-   //Constructor
+    // Constructor
 
     public Combustible(double CapacidadMaxima, double NivelActual, String TipoCombustible, double consumoPorSegundo) {
         this.CapacidadMaxima = CapacidadMaxima;
@@ -16,16 +16,19 @@ public class Combustible {
         this.consumoPorSegundo = consumoPorSegundo;
     }
 
-    //Getters y Setters
-    public double getCapacidadMaxima(){
+    // Getters y Setters
+    public double getCapacidadMaxima() {
         return CapacidadMaxima;
     }
+
     public double getNivelActual() {
         return nivelActual;
     }
+
     public String getTipoCombustible() {
         return tipoCombustible;
     }
+
     public double getConsumoPorSegundo() {
         return consumoPorSegundo;
     }
