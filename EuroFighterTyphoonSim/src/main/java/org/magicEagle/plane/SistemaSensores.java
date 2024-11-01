@@ -6,7 +6,7 @@ public class SistemaSensores {
     Eurofighter eurofighter;
     Combustible combustible;
     Motor motor;
-
+    
     // variables
     double velocidad;
     double Altitud;
