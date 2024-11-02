@@ -19,7 +19,7 @@ public class Misile extends Armamento {
     //variables de lanzamiento
     double velocidad;
     double distancia;
-    String estado;
+    public String estado = "En espera";
 
     public Misile(String model,String armamentType, int mass, String guidance, String aspect, int lookRange, int range, int maxSpeed, int overloadG, int guidanceTime, int ExplosiveMass, KeyHandler keyHandler) {
         this.model = model;
