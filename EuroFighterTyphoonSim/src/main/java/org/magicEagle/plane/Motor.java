@@ -11,7 +11,7 @@ public class Motor {
     double potenciaMaxima;
     double nivelActualPotencia;
     String Estado;
-    float Temperatura;
+    double temperatura;
     double conmsumoCombustible;
 
     // Constructor
@@ -20,7 +20,6 @@ public class Motor {
         this.potenciaMaxima = potenciaMaxima;
         this.nivelActualPotencia = nivelActualPotencia;
         this.Estado = Estado;
-        this.Temperatura = Temperatura;
         this.conmsumoCombustible = conmsumoCombustible;
         this.keyHandler = keyHandler;
     }
@@ -40,26 +39,29 @@ public class Motor {
             }
         }
     }
-    // Getters y Setters
 
-    // obtener maxima potencia
     public double getpotenciaMaxima() {
         return potenciaMaxima;
     }
 
-    // obtener nivel actual de potencia
     public double getnivelActualPotencia() {
         return nivelActualPotencia;
     }
 
-    // obtener estado
+
     public String getEstado() {
         return Estado;
     }
 
-    // obtener temperatura
-    public float getTemperatura() {
-        return Temperatura;
+    public void ajustarTemperatura() {
+        if(nivelActualPotencia > 0) {
+            temperatura = nivelActualPotencia / 200;
+        }
+    }
+
+
+    public double  getTemperatura() {
+        return temperatura;
 
     }
 

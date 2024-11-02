@@ -11,5 +11,12 @@ public class Main {
 
         System.out.println("DNI NUMERO: "+DNI.substring(0,DNI.length()-1));
         System.out.println("DNI LETRA: "+DNI.charAt(DNI.length()-1));
+
+        int num1 = 10;
+        int num2 = 20;
+
+        System.out.println(
+                num2 - num1
+        );
     }
 }

@@ -3,6 +3,7 @@ package org.magicEagle.utils;
 import org.magicEagle.Main.Eurofighter;
 import org.magicEagle.plane.Combustible;
 import org.magicEagle.plane.Motor;
+import org.magicEagle.plane.SistemaRefrigeracion;
 import org.magicEagle.plane.SistemaSensores;
 
 import javax.swing.*;
@@ -24,8 +25,11 @@ public class SimLoop extends JPanel implements Runnable {
     KeyHandler keyHandler = new KeyHandler();
     Motor motor = new Motor(150000,0,"Encendido",0,keyHandler);
     Combustible combustible = new Combustible(5000,5000,"SAF",motor.getConmsumoCombustible());
-    SistemaSensores sistemaSensores = new SistemaSensores( 0, 0, "Sensor de Peso encendido", 0,  eurofighter, combustible, 4, motor);
-    Logs logs = new Logs(motor, combustible,sistemaSensores);
+    SistemaSensores sistemaSensores = new SistemaSensores( 0, 0, "Sensor de Peso encendido",
+            motor.getTemperatura(),  eurofighter, combustible, 4, motor);
+    SistemaRefrigeracion sistemaRefrigeracion = new SistemaRefrigeracion(motor,sistemaSensores);
+    Logs logs = new Logs(motor, combustible,sistemaSensores,sistemaRefrigeracion);
+
 
     public SimLoop() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -41,9 +45,12 @@ public class SimLoop extends JPanel implements Runnable {
         // Update all the info
         motor.ajustarPotencia();
         motor.ajustarConsumo();
+        motor.ajustarTemperatura();
         combustible.consumirCombustible(motor.getConmsumoCombustible());
         sistemaSensores.obtenerPesoTotal();
         sistemaSensores.ajustarVelocidad();
+        sistemaRefrigeracion.calculaRefrigeracion();
+        sistemaRefrigeracion.refrigerar();
     }
 
     public void log() {
@@ -51,6 +58,7 @@ public class SimLoop extends JPanel implements Runnable {
         logs.logsCombustible();
         logs.logsPeso();
         logs.logsVelocidad();
+        logs.logsTemperatura();
     }
 
     public void stop() {

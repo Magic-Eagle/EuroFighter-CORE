@@ -6,7 +6,7 @@ public class SistemaSensores {
     Eurofighter eurofighter;
     Combustible combustible;
     Motor motor;
-    
+
     // variables
     double velocidad;
     double Altitud;
@@ -17,7 +17,7 @@ public class SistemaSensores {
     double resistenciaAereoDinamica;
 
     // Constructor
-    public SistemaSensores(float Altitud, float Presion, String Estado, float Temperatura, Eurofighter eurofighter,
+    public SistemaSensores(float Altitud, float Presion, String Estado, double Temperatura, Eurofighter eurofighter,
             Combustible combustible, double resistenciaAereoDinamica, Motor motor) {
         this.Altitud = Altitud;
         this.Presion = Presion;

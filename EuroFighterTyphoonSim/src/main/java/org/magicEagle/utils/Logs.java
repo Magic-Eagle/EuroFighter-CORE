@@ -2,6 +2,7 @@ package org.magicEagle.utils;
 
 import org.magicEagle.plane.Combustible;
 import org.magicEagle.plane.Motor;
+import org.magicEagle.plane.SistemaRefrigeracion;
 import org.magicEagle.plane.SistemaSensores;
 
 public class Logs {
@@ -9,11 +10,13 @@ public class Logs {
     Motor motor;
     Combustible combustible;
     SistemaSensores sistemaSensores;
+    SistemaRefrigeracion sistemaRefrigeracion;
 
-    public Logs(Motor motor, Combustible combustible, SistemaSensores sistemaSensores) {
+    public Logs(Motor motor, Combustible combustible, SistemaSensores sistemaSensores, SistemaRefrigeracion sistemaRefrigeracion) {
         this.motor = motor;
         this.combustible = combustible;
         this.sistemaSensores = sistemaSensores;
+        this.sistemaRefrigeracion = sistemaRefrigeracion;
     }
 
     public void logMotor() {
@@ -32,5 +35,13 @@ public class Logs {
 
     public void logsVelocidad() {
         System.out.printf("Velocidad: \u001B[32m  %.3f \u001B[0m \n", sistemaSensores.ajustarVelocidad());
+    }
+
+    public void logsTemperatura() {
+        System.out.printf("Temperatura: \u001B[32m  %.2f \u001B[0m \n", sistemaRefrigeracion.getTemperatura());
+    }
+
+    public void logsRefrigeracion() {
+        System.out.printf("Refrigeracion: \u001B[32m  %.3f \u001B[0m \n",sistemaRefrigeracion.getRefrigeracion());
     }
 }
