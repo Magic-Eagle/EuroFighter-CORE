@@ -30,7 +30,6 @@ public class SimLoop extends JPanel implements Runnable {
     SistemaRefrigeracion sistemaRefrigeracion = new SistemaRefrigeracion(motor,sistemaSensores);
     Logs logs = new Logs(motor, combustible,sistemaSensores,sistemaRefrigeracion);
 
-
     public SimLoop() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
