@@ -26,11 +26,11 @@ public class Main {
 //        );
 
         Bomb bomb = new Bomb("AGM-65B","Bomb", 1000, "Laser", 1000, 10, 100, 100, 100);
-        Misile misile = new Misile("AIM-9B FGW.2", "Misile", 75,"Laser" , "Rear Aspect", 50000,10000, 10000, 9,25,7);
+        Misile misile = new Misile("AIM-9B FGW.2", "Misile", 75,"Laser" , "Rear Aspect", 50000,10000, 10000, 9,25,7, null);
         PilonIzquierdo pilonIzquierdo = new PilonIzquierdo();
         PilonCentral pilonCentral = new PilonCentral();
         PilonDerecho pilonDerecho = new PilonDerecho();
-        Misile misile2 = new Misile("AIM-9B FGW.2", "Misile", 75,"Laser" , "Rear Aspect", 50000,10000, 10000, 9,25,7);
+        Misile misile2 = new Misile("AIM-9B FGW.2", "Misile", 75,"Laser" , "Rear Aspect", 50000,10000, 10000, 9,25,7, null);
 
         pilonIzquierdo.loadGun(misile);
         pilonCentral.loadGun(bomb);

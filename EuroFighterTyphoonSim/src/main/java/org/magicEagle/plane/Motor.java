@@ -24,6 +24,10 @@ public class Motor {
         this.keyHandler = keyHandler;
     }
 
+    public void reset() {
+        this.nivelActualPotencia = 0;
+    }
+
     public void ajustarPotencia() {
 
         if (nivelActualPotencia <= potenciaMaxima) {

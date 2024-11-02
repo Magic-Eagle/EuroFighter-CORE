@@ -34,7 +34,7 @@ public class Main {
         window.setLocationRelativeTo(null);
 
         window.setResizable(false);
-        window.setTitle("Magic Eagle - Eurofighter Typhoon 1.0");
+        window.setTitle("Magic Eagle - Eurofighter Typhoon DemoUI");
         window.setVisible(true);
 
         SimLoop simLoop = new SimLoop();
