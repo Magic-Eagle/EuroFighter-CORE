@@ -20,12 +20,14 @@ public class PilonDerecho {
         }
     }
 
-    public void checkStates() {
+    public int cantidadArmas() {
+        int i = 0;
         for (Armamento arma : armas) {
-           if (Objects.equals(arma.estado, "Lanzado")) {
-               armas.remove(arma);
-           }
+            if (!arma.estado) {
+                i++;
+            }
         }
+        return i;
     }
 
     public void unloadGun(Armamento arma) {

@@ -6,10 +6,20 @@ import java.util.ArrayList;
 
 public class PilonIzquierdo {
     int pilonesMax = 4;
-    ArrayList<Armamento> armas;
+    public ArrayList<Armamento> armas;
 
     public PilonIzquierdo() {
         armas = new ArrayList<>();
+    }
+
+    public int cantidadArmas() {
+        int i = 0;
+        for (Armamento arma : armas) {
+            if (!arma.estado) {
+                i++;
+            }
+        }
+        return i;
     }
 
     public void loadGun(Armamento arma) {
