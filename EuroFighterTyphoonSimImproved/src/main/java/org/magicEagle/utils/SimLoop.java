@@ -78,8 +78,13 @@ public class SimLoop extends JPanel implements Runnable {
         eurofighter.sistemaSensores.ajustarVelocidad();
         eurofighter.sistemaRefrigeracion.calculaRefrigeracion();
         eurofighter.sistemaRefrigeracion.refrigerar();
-        eurofighter.pilonDerecho.cantidadArmas();
-        eurofighter.pilonIzquierdo.cantidadArmas();
+        eurofighter.pilonDerecho.cantidadMisiles();
+        eurofighter.pilonDerecho.cantidadBombs();
+        eurofighter.pilonDerecho.showLodout();
+        eurofighter.pilonIzquierdo.cantidadMisiles();
+        eurofighter.pilonIzquierdo.cantidadBombs();
+        eurofighter.pilonIzquierdo.showLodout();
+        eurofighter.pilonIzquierdo.showLodout();
     }
 
     /**
@@ -108,8 +113,8 @@ public class SimLoop extends JPanel implements Runnable {
         if(eurofighter.keyHandler.leftLaunch3Pressed && !eurofighter.misile3.launched){
             eurofighter.misile3.actualizarEstado();
         }
-        if(eurofighter.keyHandler.leftLaunch4Pressed && !eurofighter.misile4.launched){
-            eurofighter.misile4.actualizarEstado();
+        if(eurofighter.keyHandler.leftLaunch4Pressed && !eurofighter.bomb1.launched){
+            eurofighter.bomb1.actualizarEstado();
         }
     }
     /**
@@ -117,17 +122,17 @@ public class SimLoop extends JPanel implements Runnable {
      * If any of the right launch buttons are pressed, the corresponding missile's state is updated.
      */
     public void checkRightLaunch(){
-        if(eurofighter.keyHandler.rightLaunch1Pressed){
+        if(eurofighter.keyHandler.rightLaunch1Pressed && !eurofighter.misile5.launched){
             eurofighter.misile5.actualizarEstado();
         }
-        if(eurofighter.keyHandler.rightLaunch2Pressed){
+        if(eurofighter.keyHandler.rightLaunch2Pressed && !eurofighter.misile6.launched){
             eurofighter.misile6.actualizarEstado();
         }
-        if(eurofighter.keyHandler.rightLaunch3Pressed){
+        if(eurofighter.keyHandler.rightLaunch3Pressed  && !eurofighter.misile7.launched){
             eurofighter.misile7.actualizarEstado();
         }
-        if(eurofighter.keyHandler.rightLaunch4Pressed){
-            eurofighter.misile8.actualizarEstado();
+        if(eurofighter.keyHandler.rightLaunch4Pressed && !eurofighter.bomb1.launched){
+            eurofighter.bomb2.actualizarEstado();
         }
     }
 
@@ -145,8 +150,10 @@ public class SimLoop extends JPanel implements Runnable {
         String velocidad = String.format( "%.3f", eurofighter.sistemaSensores.ajustarVelocidad());
         String combustibleString = String.format( "%.3f", eurofighter.combustible.getNivelActual());
         String temperatura = String.format("%.3f", eurofighter.motor.getTemperatura());
-        String cantidadArmasDerecha = String.format("%d", eurofighter.pilonDerecho.cantidadArmas());
-        String cantidadArmasIzquierda = String.format("%d", eurofighter.pilonIzquierdo.cantidadArmas());
+        String cantidadMisilesDerecha = String.format("%d", eurofighter.pilonDerecho.cantidadMisiles());
+        String cantidadMisilesIzquierda = String.format("%d", eurofighter.pilonIzquierdo.cantidadMisiles());
+        String cantidadBombasDerecha = String.format("%d", eurofighter.pilonDerecho.cantidadBombs());
+        String cantidadBombasIzquierda = String.format("%d", eurofighter.pilonIzquierdo.cantidadBombs());
 
         Graphics g2 = (Graphics2D)g;
 
@@ -243,27 +250,69 @@ public class SimLoop extends JPanel implements Runnable {
             g2.drawString("MISILE LAUNCHED", 530, 635);
         }
 
-        if(eurofighter.misile4.shouldDisplayExplosion()) {
-            g2.setColor(Color.red);
+        if(eurofighter.bomb1.shouldDisplayExplosion()) {
+            g2.setColor(Color.GREEN);
             g2.fillRect(500, 610, 260, 40);
             g2.setColor(Color.black);
             g2.drawString("MISILE LAUNCHED", 530, 735);
         }
 
+        if(eurofighter.misile5.shouldDisplayExplosion()) {
+            g2.setColor(Color.red);
+            g2.fillRect(500, 310, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString("MISILE LAUNCHED", 430, 335);
+        }
+
+        if(eurofighter.misile6.shouldDisplayExplosion()) {
+            g2.setColor(Color.red);
+            g2.fillRect(500, 410, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString("MISILE LAUNCHED", 530, 435);
+        }
+
+        if(eurofighter.misile7.shouldDisplayExplosion()) {
+            g2.setColor(Color.red);
+            g2.fillRect(500, 510, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString("MISILE LAUNCHED", 530, 635);
+        }
+
+        if(eurofighter.bomb2.shouldDisplayExplosion()) {
+            g2.setColor(Color.GREEN);
+            g2.fillRect(500, 610, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString("BOMB LAUNCHED", 530, 735);
+        }
+
         // numeros
 
-        if (eurofighter.pilonDerecho.armas != null) {
+        if (eurofighter.pilonDerecho.misiles != null) {
             g2.setColor(Color.red);
             g2.fillRect(400, 470, 260, 40);
             g2.setColor(Color.black);
-            g2.drawString(String.format(cantidadArmasIzquierda, "Cantidad de armas P1:  %.3d"), 430, 495);
+            g2.drawString(String.format(cantidadMisilesIzquierda, "Cantidad de Bombas P1:  %.3d"), 430, 495);
         }
 
-        if (eurofighter.pilonIzquierdo.armas != null) {
+        if (eurofighter.pilonIzquierdo.misiles != null) {
             g2.setColor(Color.red);
             g2.fillRect(400, 570, 260, 40);
             g2.setColor(Color.black);
-            g2.drawString(String.format(cantidadArmasDerecha, "Cantidad de armas P2:  %.3d"), 430, 595);
+            g2.drawString(String.format(cantidadMisilesDerecha, "Cantidad de Bombas P2:  %.3d"), 430, 595);
+        }
+
+        if (eurofighter.pilonDerecho.bombs != null) {
+            g2.setColor(Color.red);
+            g2.fillRect(400, 670, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString(String.format(cantidadBombasIzquierda, "Cantidad de Bombas P1:  %.3d"), 430, 695);
+        }
+
+        if (eurofighter.pilonIzquierdo.bombs != null) {
+            g2.setColor(Color.red);
+            g2.fillRect(400, 770, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString(String.format(cantidadBombasDerecha, "Cantidad de Bombas P2:  %.3d"), 430, 795);
         }
 
         g2.dispose();
@@ -308,15 +357,15 @@ public class SimLoop extends JPanel implements Runnable {
         // 50hz interval
         int updateInterval = 8;
 
-        eurofighter.pilonIzquierdo.loadGun(eurofighter.misile1);
-        eurofighter.pilonIzquierdo.loadGun(eurofighter.misile2);
-        eurofighter.pilonIzquierdo.loadGun(eurofighter.misile3);
-        eurofighter.pilonIzquierdo.loadGun(eurofighter.misile4);
+        eurofighter.pilonIzquierdo.loadMisile(eurofighter.misile1);
+        eurofighter.pilonIzquierdo.loadMisile(eurofighter.misile2);
+        eurofighter.pilonIzquierdo.loadMisile(eurofighter.misile3);
+        eurofighter.pilonIzquierdo.loadBomb(eurofighter.bomb1);
 
-        eurofighter.pilonDerecho.loadGun(eurofighter.misile5);
-        eurofighter.pilonDerecho.loadGun(eurofighter.misile6);
-        eurofighter. pilonDerecho.loadGun(eurofighter.misile7);
-        eurofighter.pilonDerecho.loadGun(eurofighter.misile8);
+        eurofighter.pilonDerecho.loadMisiles(eurofighter.misile5);
+        eurofighter.pilonDerecho.loadMisiles(eurofighter.misile6);
+        eurofighter. pilonDerecho.loadMisiles(eurofighter.misile7);
+        eurofighter.pilonDerecho.loadBomb(eurofighter.bomb2);
 
 
         while (running) {

@@ -1,6 +1,8 @@
 package org.magicEagle.plane.Armamento.bahiaArmas;
 
 import org.magicEagle.plane.Armamento.Armamento;
+import org.magicEagle.plane.Armamento.Bomb;
+import org.magicEagle.plane.Armamento.Misile;
 
 import java.util.ArrayList;
 /**
@@ -9,14 +11,19 @@ import java.util.ArrayList;
  */
 public class PilonIzquierdo {
     int pilonesMax = 4;
-    public ArrayList<Armamento> armas;
+
+    public ArrayList<Armamento> guns;
+    public ArrayList<Misile> misiles;
+    public ArrayList<Bomb> bombs;
 
     /**
      * Constructor for PilonIzquierdo.
      * Initializes the armas list.
      */
     public PilonIzquierdo() {
-        armas = new ArrayList<>();
+        misiles  = new ArrayList<>();
+        bombs = new  ArrayList<>();
+        guns = new ArrayList<>();
     }
 
     /**
@@ -24,9 +31,9 @@ public class PilonIzquierdo {
      *
      * @return the number of inactive weapons.
      */
-    public int cantidadArmas() {
+    public int cantidadMisiles() {
         int i = 0;
-        for (Armamento arma : armas) {
+        for (Misile arma : misiles) {
             if (!arma.estado) {
                 i++;
             }
@@ -39,17 +46,42 @@ public class PilonIzquierdo {
      *
      * @param arma the weapon to be loaded.
      */
-    public void loadGun(Armamento arma) {
-        if(armas.size() < pilonesMax) {
-            armas.add(arma);
+    public void loadMisile(Misile arma) {
+        if(misiles.size() + bombs.size() < pilonesMax) {
+            misiles.add(arma);
+        }else {
+            System.out.println("No hay espacio en el pylon izquierdo");
         }
+    }
+
+    public void loadBomb(Bomb arma) {
+        if(misiles.size() + bombs.size() < pilonesMax) {
+            bombs.add(arma);
+        } else {
+            System.out.println("No hay espacio en el pylon izquierdo");
+        }
+    }
+
+    public int cantidadBombs() {
+        int i = 0;
+        for (Bomb arma : bombs) {
+            if (!arma.estado) {
+                i++;
+            }
+        }
+        return i;
+    }
+
+    public void unloadMisile(Armamento arma) {
+        misiles.remove(arma);
     }
     /**
      * Returns the list of weapons currently loaded on the pylon.
      *
      * @return the list of loaded weapons.
      */
-    public ArrayList<Armamento> showLodout() {
-        return armas;
+    public void showLodout() {
+        guns.addAll(misiles);
+        guns.addAll(bombs);
     }
 }
