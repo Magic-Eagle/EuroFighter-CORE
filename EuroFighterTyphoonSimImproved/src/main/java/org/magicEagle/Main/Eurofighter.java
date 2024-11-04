@@ -11,12 +11,14 @@ import org.magicEagle.plane.SistemaSensores;
 import org.magicEagle.utils.KeyHandler;
 import org.magicEagle.utils.Logs;
 
+import java.util.Date;
+
 /**
  * @Author: CoderAnchel
  * The Eurofighter class represents a Eurofighter aircraft with various components and systems.
  */
 public class Eurofighter {
-
+    public Date date = new Date();
     /**
      * Declaring the components and systems of the Eurofighter.
      */

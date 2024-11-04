@@ -24,6 +24,8 @@ public class Misile extends Armamento {
     //variables de lanzamiento
     double velocidad;
     double distancia;
+    private long launchTime = 0;
+    public boolean launched = false;
 
     /**
      * Constructs a new Misile instance with the specified parameters.
@@ -61,7 +63,22 @@ public class Misile extends Armamento {
      * Updates the state of the missile to "Impacto".
      */
     public void actualizarEstado(){
-        this.estado = true;
+        if (!launched) {
+            this.estado = true;
+            launchTime = System.currentTimeMillis();
+            launched = true;
+        }
+    }
+
+    public boolean shouldDisplayExplosion() {
+        long currentTime = System.currentTimeMillis();
+
+        // Devuelve true si la diferencia entre el tiempo actual y el tiempo de lanzamiento es menor a 10 segundos
+        if (estado && (currentTime - launchTime < 10000)) {
+            return true;  // Mostrar el mensaje
+        }
+
+        return false;  // No mostrar el mensaje
     }
     /**
      * @Author: CoderAnchel

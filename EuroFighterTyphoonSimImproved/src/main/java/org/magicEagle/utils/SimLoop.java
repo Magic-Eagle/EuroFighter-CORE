@@ -98,16 +98,17 @@ public class SimLoop extends JPanel implements Runnable {
      * If any of the left launch buttons are pressed, the corresponding missile's state is updated.
      */
     public void checkLeftLaunch(){
-        if(eurofighter.keyHandler.leftLaunch1Pressed){
+
+        if(eurofighter.keyHandler.leftLaunch1Pressed && !eurofighter.misile1.launched){
             eurofighter.misile1.actualizarEstado();
         }
-        if(eurofighter.keyHandler.leftLaunch2Pressed){
+        if(eurofighter.keyHandler.leftLaunch2Pressed && !eurofighter.misile2.launched){
             eurofighter.misile2.actualizarEstado();
         }
-        if(eurofighter.keyHandler.leftLaunch3Pressed){
+        if(eurofighter.keyHandler.leftLaunch3Pressed && !eurofighter.misile3.launched){
             eurofighter.misile3.actualizarEstado();
         }
-        if(eurofighter.keyHandler.leftLaunch4Pressed){
+        if(eurofighter.keyHandler.leftLaunch4Pressed && !eurofighter.misile4.launched){
             eurofighter.misile4.actualizarEstado();
         }
     }
@@ -139,8 +140,6 @@ public class SimLoop extends JPanel implements Runnable {
      */
     public void paintComponent(Graphics g)   {
         super.paintComponent(g);
-
-        Date date = new Date();
 
         String potencia = String.format("%.3f", eurofighter.motor.getnivelActualPotencia());
         String velocidad = String.format( "%.3f", eurofighter.sistemaSensores.ajustarVelocidad());
@@ -223,25 +222,32 @@ public class SimLoop extends JPanel implements Runnable {
         g2.setColor(Color.black);
         g2.drawString("START DOWN ENGINE", 130, 465);// Ajusta las coordenadas en el eje y
 
-        if(eurofighter.misile1.estado == true) {
+        if(eurofighter.misile1.shouldDisplayExplosion()) {
             g2.setColor(Color.red);
-            g2.fillRect(400, 310, 260, 40);
+            g2.fillRect(500, 310, 260, 40);
             g2.setColor(Color.black);
             g2.drawString("MISILE LAUNCHED", 430, 335);
         }
 
-        if(eurofighter.misile2.estado == true) {
+        if(eurofighter.misile2.shouldDisplayExplosion()) {
             g2.setColor(Color.red);
             g2.fillRect(500, 410, 260, 40);
             g2.setColor(Color.black);
             g2.drawString("MISILE LAUNCHED", 530, 435);
         }
 
-        if(eurofighter.misile3.estado == true) {
+        if(eurofighter.misile3.shouldDisplayExplosion()) {
             g2.setColor(Color.red);
             g2.fillRect(500, 510, 260, 40);
             g2.setColor(Color.black);
             g2.drawString("MISILE LAUNCHED", 530, 635);
+        }
+
+        if(eurofighter.misile4.shouldDisplayExplosion()) {
+            g2.setColor(Color.red);
+            g2.fillRect(500, 610, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString("MISILE LAUNCHED", 530, 735);
         }
 
         // numeros

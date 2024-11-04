@@ -44,7 +44,7 @@ public class Main {
 //        System.out.println("PILON DERECHO: "+pilonDerecho.showLodout());
 
         Date date = new Date();
-        String hora = String.format("%tT", date);
+        String hora = String.format("%tT", date.getTime());
         System.out.println(hora);
     }
 }
