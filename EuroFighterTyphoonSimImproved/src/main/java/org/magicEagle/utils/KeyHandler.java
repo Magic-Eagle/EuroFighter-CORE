@@ -25,7 +25,8 @@ public class KeyHandler implements KeyListener {
             middleLaunch2Pressed,
             middleLaunch3Pressed,
             middleLaunch4Pressed,
-            middleLaunch5Pressed;
+            middleLaunch5Pressed,
+            shotIsPressed;
     /**
      * This method is called when a key is typed.
      * It is not used in this implementation.
@@ -96,6 +97,10 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_8) {
             rightLaunch4Pressed = true;
         }
+
+        if (code == KeyEvent.VK_ENTER) {
+            shotIsPressed = true;
+        }
     }
 
     /**
@@ -118,6 +123,9 @@ public class KeyHandler implements KeyListener {
 
         if(code == KeyEvent.VK_X) {
             closePressed = false;
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            shotIsPressed = false;
         }
     }
 }

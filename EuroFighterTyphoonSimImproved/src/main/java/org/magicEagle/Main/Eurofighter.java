@@ -1,6 +1,7 @@
 package org.magicEagle.Main;
 
 import org.magicEagle.plane.Armamento.Bomb;
+import org.magicEagle.plane.Armamento.Cannon;
 import org.magicEagle.plane.Armamento.Misile;
 import org.magicEagle.plane.Armamento.bahiaArmas.PilonCentral;
 import org.magicEagle.plane.Armamento.bahiaArmas.PilonDerecho;
@@ -39,6 +40,7 @@ public class Eurofighter {
     public Misile misile8 = new Misile("Misile 8", "Misile", 1000, "Guidance", "Aspect", 100, 1000, 1000, 100, 100, 100, this.keyHandler, false);
     public Bomb bomb1 = new Bomb("Bomb 1", "Bomb", 1000, "Guidance", 1000, 100, 1000, 1000, 100, false, this.keyHandler);
     public Bomb bomb2 = new Bomb("Bomb 2", "Bomb", 1000, "Guidance", 1000, 100, 1000, 1000, 100, false, this.keyHandler);
+    public Cannon cannon = new Cannon(this.keyHandler, false);
 
     public PilonDerecho pilonDerecho = new PilonDerecho();
     public PilonIzquierdo pilonIzquierdo = new PilonIzquierdo();

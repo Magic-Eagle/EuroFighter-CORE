@@ -84,7 +84,6 @@ public class SimLoop extends JPanel implements Runnable {
         eurofighter.pilonIzquierdo.cantidadMisiles();
         eurofighter.pilonIzquierdo.cantidadBombs();
         eurofighter.pilonIzquierdo.showLodout();
-        eurofighter.pilonIzquierdo.showLodout();
     }
 
     /**
@@ -102,6 +101,13 @@ public class SimLoop extends JPanel implements Runnable {
      * Checks the state of the left launch buttons and updates the missile states accordingly.
      * If any of the left launch buttons are pressed, the corresponding missile's state is updated.
      */
+
+    public void checkIfShot() {
+        if (eurofighter.keyHandler.shotIsPressed) {
+            eurofighter.cannon.shoot();
+        }
+    }
+
     public void checkLeftLaunch(){
 
         if(eurofighter.keyHandler.leftLaunch1Pressed && !eurofighter.misile1.launched){
@@ -131,7 +137,7 @@ public class SimLoop extends JPanel implements Runnable {
         if(eurofighter.keyHandler.rightLaunch3Pressed  && !eurofighter.misile7.launched){
             eurofighter.misile7.actualizarEstado();
         }
-        if(eurofighter.keyHandler.rightLaunch4Pressed && !eurofighter.bomb1.launched){
+        if(eurofighter.keyHandler.rightLaunch4Pressed && !eurofighter.bomb2.launched){
             eurofighter.bomb2.actualizarEstado();
         }
     }
@@ -315,6 +321,13 @@ public class SimLoop extends JPanel implements Runnable {
             g2.drawString(String.format(cantidadBombasDerecha, "Cantidad de Bombas P2:  %.3d"), 430, 795);
         }
 
+
+            g2.setColor(Color.red);
+            g2.fillRect(700, 770, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString(String.format("%d", eurofighter.cannon.amo), 730, 795);
+
+
         g2.dispose();
     }
     /**
@@ -375,6 +388,7 @@ public class SimLoop extends JPanel implements Runnable {
             updateInfo();
             checkLeftLaunch();
             checkRightLaunch();
+            checkIfShot();
             log();
             repaint();
 
