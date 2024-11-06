@@ -12,7 +12,6 @@ public class KeyHandler implements KeyListener {
             upPressed,
             downPressed,
             closePressed,
-            launchPressed,
             leftLaunch1Pressed,
             leftLaunch2Pressed,
             leftLaunch3Pressed,
@@ -37,7 +36,6 @@ public class KeyHandler implements KeyListener {
     public void keyTyped(KeyEvent e) {
         //not used
     }
-
     /**
      * This method is called when a key is pressed.
      * It updates the state of the corresponding key to true.
@@ -58,10 +56,6 @@ public class KeyHandler implements KeyListener {
 
         if(code == KeyEvent.VK_X) {
             closePressed = true;
-        }
-
-        if(code == KeyEvent.VK_0) {
-            launchPressed = true;
         }
 
         //left launch
@@ -98,11 +92,26 @@ public class KeyHandler implements KeyListener {
             rightLaunch4Pressed = true;
         }
 
+        //middle launch
+        if(code == KeyEvent.VK_R) {
+            middleLaunch1Pressed = true;
+        }
+        if(code == KeyEvent.VK_T) {
+            middleLaunch2Pressed = true;
+        }
+        if(code == KeyEvent.VK_Y) {
+            middleLaunch3Pressed = true;
+        }
+        if(code == KeyEvent.VK_U) {
+            middleLaunch4Pressed = true;
+        }
+        if(code == KeyEvent.VK_SPACE) {
+            middleLaunch5Pressed = true;
+        }
         if (code == KeyEvent.VK_ENTER) {
             shotIsPressed = true;
         }
     }
-
     /**
      * This method is called when a key is released.
      * It updates the state of the corresponding key to false.

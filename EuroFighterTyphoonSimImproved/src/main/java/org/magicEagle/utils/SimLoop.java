@@ -31,13 +31,13 @@ public class SimLoop extends JPanel implements Runnable {
 
     // Screen size
     public final int titleSize = originalTitleSize * scale; // 48x48
-    public final int maxScreenCol = 28;
-    public final int maxScreenRow = 17;
+    public final int maxScreenCol = 31;
+    public final int maxScreenRow = 19;
     public final int screenWidth = titleSize * maxScreenCol; // 768px
     public final int screenHeight = titleSize * maxScreenRow; // 576 px
 
     // BufferedImage to hold the image of the Eurofighter
-    BufferedImage image;
+    BufferedImage image, image2;
 
 
     // Instance of Eurofighter with the name and status
@@ -55,7 +55,7 @@ public class SimLoop extends JPanel implements Runnable {
      */
     public SimLoop() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.BLACK);
+        this.setBackground(Color.decode("#1e1e1e"));
         this.setDoubleBuffered(true);
         this.addKeyListener(eurofighter.keyHandler);
         this.setFocusable(true);
@@ -84,6 +84,9 @@ public class SimLoop extends JPanel implements Runnable {
         eurofighter.pilonIzquierdo.cantidadMisiles();
         eurofighter.pilonIzquierdo.cantidadBombs();
         eurofighter.pilonIzquierdo.showLodout();
+        eurofighter.pilonCentral.cantidadMisiles();
+        eurofighter.pilonCentral.cantidadBombs();
+        eurofighter.pilonCentral.showLodout();
     }
 
     /**
@@ -103,8 +106,11 @@ public class SimLoop extends JPanel implements Runnable {
      */
 
     public void checkIfShot() {
-        if (eurofighter.keyHandler.shotIsPressed) {
+        if (eurofighter.keyHandler.shotIsPressed && eurofighter.cannon.amo > 0) {
             eurofighter.cannon.shoot();
+            eurofighter.cannon.estado = true;
+        } else if (!eurofighter.keyHandler.shotIsPressed) {
+            eurofighter.cannon.estado = false;
         }
     }
 
@@ -141,6 +147,23 @@ public class SimLoop extends JPanel implements Runnable {
             eurofighter.bomb2.actualizarEstado();
         }
     }
+    public void checkMiddleLaunch(){
+        if(eurofighter.keyHandler.middleLaunch1Pressed && !eurofighter.misile11.launched){
+            eurofighter.misile11.actualizarEstado();
+        }
+        if(eurofighter.keyHandler.middleLaunch2Pressed && !eurofighter.misile12.launched){
+            eurofighter.misile12.actualizarEstado();
+        }
+        if(eurofighter.keyHandler.middleLaunch3Pressed  && !eurofighter.misile13.launched){
+            eurofighter.misile13.actualizarEstado();
+        }
+        if(eurofighter.keyHandler.middleLaunch4Pressed  && !eurofighter.misile14.launched){
+            eurofighter.misile14.actualizarEstado();
+        }
+        if(eurofighter.keyHandler.middleLaunch5Pressed && !eurofighter.bomb11.launched){
+            eurofighter.bomb11.actualizarEstado();
+        }
+    }
 
     /**
      * Paints the components of the simulation loop panel.
@@ -160,173 +183,271 @@ public class SimLoop extends JPanel implements Runnable {
         String cantidadMisilesIzquierda = String.format("%d", eurofighter.pilonIzquierdo.cantidadMisiles());
         String cantidadBombasDerecha = String.format("%d", eurofighter.pilonDerecho.cantidadBombs());
         String cantidadBombasIzquierda = String.format("%d", eurofighter.pilonIzquierdo.cantidadBombs());
+        String cantidadMisilesCentro = String.format("%d", eurofighter.pilonCentral.cantidadMisiles());
+        String cantidadBombasCentro = String.format("%d", eurofighter.pilonCentral.cantidadBombs());
 
         Graphics g2 = (Graphics2D)g;
 
         //Fuente
         try {
             // Carga la fuente desde un archivo .ttf
-            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/java/org/magicEagle/assets/Excalifont-Regular (1).ttf")).deriveFont(Font.BOLD, 21);
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/java/org/magicEagle/assets/Inter-VariableFont_opsz,wght.ttf")).deriveFont(Font.BOLD, 14);
+
+            Font customFont2 = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/java/org/magicEagle/assets/Inter-VariableFont_opsz,wght.ttf")).deriveFont(Font.BOLD, 24);
+
             image = ImageIO.read(new File("src/main/java/org/magicEagle/assets/eurofighter-freisteller.png"));
+            image2 = ImageIO.read(new File("src/main/java/org/magicEagle/assets/Eurofighter_Typhoon-logo-B7C3B310E1-seeklogo.com.png"));
             g2.setFont(customFont);  // Configura la fuente personalizada
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
         FontMetrics metrics = g2.getFontMetrics(g2.getFont());
 
+        g2.setColor(Color.decode("#08193c"));
+        g2.fillRect(0,0,1800, 60);
+        g2.drawImage(image2, 20, 5, 120, 50, this);
 
         g2.setColor(Color.white);
-        g2.drawString("Velocidad", 150, 35);
+        g2.drawString("MagicEagle - TEST BANK", 1250, 35);
 
         g2.setColor(Color.white);
-        g2.fillRect(120, 50, 160, 40);
+        g2.drawString("Velocidad", 120, 95);
+
+        g2.setColor(Color.white);
+        g2.fillRect(120, 110, 160, 40);
         g2.setColor(Color.black);
-        g2.drawString(String.format(velocidad,"%.3f" ), 150, 75);
+        g2.drawString(String.format(velocidad,"%.3f" ), 150, 135);
 
         g2.setColor(Color.white);
-        g2.drawString("Potencia", 330, 35);
+        g2.drawString("Potencia", 300, 95);
 
         g2.setColor(Color.white);
-        g2.fillRect(300, 50, 160, 40);
+        g2.fillRect(300, 110, 160, 40);
         g2.setColor(Color.black);
-        g2.drawString(String.format(potencia, "%.3f"), 330, 75);
+        g2.drawString(String.format(potencia, "%.3f"), 330, 135);
 
         g2.setColor(Color.white);
-        g2.drawString("Combustible", 510, 35);
+        g2.drawString("Combustible", 480, 95);
 
         g2.setColor(Color.white);
-        g2.fillRect(480, 50, 160, 40);
+        g2.fillRect(480, 110, 160, 40);
         g2.setColor(Color.black);
-        g2.drawString(String.format(combustibleString, "%.3f"), 510, 75);
+        g2.drawString(String.format(combustibleString, "%.3f"), 510, 135);
 
         g2.setColor(Color.white);
-        g2.drawString("Temperatura", 218, 180);
+        g2.drawString("Temperatura", 188, 240);
 
         g2.setColor(Color.white);
-        g2.fillRect(188, 190, 160, 40);
+        g2.fillRect(188, 250, 160, 40);
         g2.setColor(Color.black);
-        g2.drawString(String.format(temperatura, "%.2f"), 218, 215);
+        g2.drawString(String.format(temperatura, "%.2f"), 218, 275);
 
         g2.setColor(Color.white);
-        g2.drawString("Refrigeracion", 418, 180);
+        g2.drawString("Refrigeracion", 388, 240);
 
         g2.setColor(Color.white);
-        g2.fillRect(388, 190, 160, 40);
+        g2.fillRect(388, 250, 160, 40);
         g2.setColor(Color.black);
-        g2.drawString("100%", 418, 215);
+        g2.drawString("100%", 418, 275);
 
-        g2.drawImage(image, 700, 50,560,300, this);
+        g2.drawImage(image, 700, 50, 560, 300, this);
 
-
-        g2.setColor(Color.yellow);
-        g2.fillRect(95, 300, 260, 40);
+        g2.setColor(Color.decode("#ffd43b"));
+        g2.fillRect(95, 300 + 30, 260, 40);
         g2.setColor(Color.black);
-        g2.drawString("START ELECTRIC UNIT", 130, 325);
+        g2.drawString("START ELECTRIC UNIT", 141, 325 + 30);
 
         // Sexto rectángulo (verde)
-        g2.setColor(Color.green);
-        g2.fillRect(95, 370, 260, 40);
+        g2.setColor(Color.decode("#69db7c"));
+        g2.fillRect(95, 370 + 30, 260, 40);
         g2.setColor(Color.black);
-        g2.drawString("START ENGINE", 130, 395);
+        g2.drawString("START ENGINE", 170, 395 + 30);
 
         // Séptimo rectángulo (rosa)
-        g2.setColor(Color.pink);
-        g2.fillRect(95, 440, 260, 40);
+        g2.setColor(Color.decode("#da77f2"));
+        g2.fillRect(95, 440 + 30, 260, 40);
         g2.setColor(Color.black);
-        g2.drawString("START DOWN ENGINE", 130, 465);// Ajusta las coordenadas en el eje y
+        g2.drawString("SHUT DOWN ENGINE", 145, 465 + 30);
 
-        if(eurofighter.misile1.shouldDisplayExplosion()) {
+        g2.setColor(Color.WHITE);
+        g2.drawString("Misiles", 430, 325);
+
+        g2.setColor(Color.WHITE);
+        g2.drawString("Bombs", 730, 325);
+
+        g2.setColor(Color.WHITE);
+        g2.drawString("Cannon", 1030, 325);
+
+        if (eurofighter.misile1.shouldDisplayExplosion()) {
+            g2.setColor(Color.decode("#ffc9c9"));
+            g2.fillRect(430, 490, 260, 30);
+
+            g2.setColor(Color.decode("#e03131"));
+            g2.drawRect(430, 490, 260, 30);
+
+            g2.setColor(Color.decode("#e03131"));
+            g2.drawString("MISILE 1 IS OUT", 460, 512);
+        }
+
+        // Repetimos para otros elementos según la lógica anterior
+        if (eurofighter.misile2.shouldDisplayExplosion()) {
+            g2.setColor(Color.decode("#ffc9c9"));
+            g2.fillRect(430, 525, 260, 30);
+
+            g2.setColor(Color.decode("#e03131"));
+            g2.drawRect(430, 525, 260, 30);
+
+            g2.setColor(Color.decode("#e03131"));
+            g2.drawString("MISILE 2 IS OUT", 460, 547);
+        }
+
+        if (eurofighter.misile3.shouldDisplayExplosion()) {
+            g2.setColor(Color.decode("#ffc9c9"));
+            g2.fillRect(430, 560, 260, 30);
+
+            g2.setColor(Color.decode("#e03131"));
+            g2.drawRect(430, 560, 260, 30);
+
+            g2.setColor(Color.decode("#e03131"));
+            g2.drawString("MISILE 3 IS OUT", 460, 582);
+        }
+
+        if (eurofighter.bomb1.shouldDisplayExplosion()) {
+            g2.setColor(Color.decode("#ffc9c9"));
+            g2.fillRect(730, 490, 260, 30);
+
+            g2.setColor(Color.decode("#e03131"));
+            g2.drawRect(730, 490, 260, 30);
+
+            g2.setColor(Color.decode("#e03131"));
+            g2.drawString("BOMB 1 IS OUT", 760, 512);
+        }
+
+        if (eurofighter.bomb2.shouldDisplayExplosion()) {
+            g2.setColor(Color.decode("#ffc9c9"));
+            g2.fillRect(730, 525, 260, 30);
+
+            g2.setColor(Color.decode("#e03131"));
+            g2.drawRect(730, 525, 260, 30);
+
+            g2.setColor(Color.decode("#e03131"));
+            g2.drawString("BOMB 2 IS OUT", 760, 547);
+        }
+
+        if (eurofighter.bomb11.shouldDisplayExplosion()) {
+            g2.setColor(Color.decode("#ffc9c9"));
+            g2.fillRect(730, 560, 260, 30);
+
+            g2.setColor(Color.decode("#e03131"));
+            g2.drawRect(730, 560, 260, 30);
+
+            g2.setColor(Color.decode("#e03131"));
+            g2.drawString("BOMB 3 IS OUT", 760, 582);
+        }
+
+        // Misiles lanzados adicionales
+        if (eurofighter.misile5.shouldDisplayExplosion()) {
             g2.setColor(Color.red);
             g2.fillRect(500, 310, 260, 40);
             g2.setColor(Color.black);
-            g2.drawString("MISILE LAUNCHED", 430, 335);
+            g2.drawString("MISILE LAUNCHED", 530, 335);
         }
 
-        if(eurofighter.misile2.shouldDisplayExplosion()) {
+        if (eurofighter.misile6.shouldDisplayExplosion()) {
             g2.setColor(Color.red);
             g2.fillRect(500, 410, 260, 40);
             g2.setColor(Color.black);
             g2.drawString("MISILE LAUNCHED", 530, 435);
         }
 
-        if(eurofighter.misile3.shouldDisplayExplosion()) {
-            g2.setColor(Color.red);
-            g2.fillRect(500, 510, 260, 40);
-            g2.setColor(Color.black);
-            g2.drawString("MISILE LAUNCHED", 530, 635);
-        }
-
-        if(eurofighter.bomb1.shouldDisplayExplosion()) {
-            g2.setColor(Color.GREEN);
-            g2.fillRect(500, 610, 260, 40);
-            g2.setColor(Color.black);
-            g2.drawString("MISILE LAUNCHED", 530, 735);
-        }
-
-        if(eurofighter.misile5.shouldDisplayExplosion()) {
-            g2.setColor(Color.red);
-            g2.fillRect(500, 310, 260, 40);
-            g2.setColor(Color.black);
-            g2.drawString("MISILE LAUNCHED", 430, 335);
-        }
-
-        if(eurofighter.misile6.shouldDisplayExplosion()) {
-            g2.setColor(Color.red);
-            g2.fillRect(500, 410, 260, 40);
-            g2.setColor(Color.black);
-            g2.drawString("MISILE LAUNCHED", 530, 435);
-        }
-
-        if(eurofighter.misile7.shouldDisplayExplosion()) {
-            g2.setColor(Color.red);
-            g2.fillRect(500, 510, 260, 40);
-            g2.setColor(Color.black);
-            g2.drawString("MISILE LAUNCHED", 530, 635);
-        }
-
-        if(eurofighter.bomb2.shouldDisplayExplosion()) {
-            g2.setColor(Color.GREEN);
-            g2.fillRect(500, 610, 260, 40);
-            g2.setColor(Color.black);
-            g2.drawString("BOMB LAUNCHED", 530, 735);
-        }
-
-        // numeros
-
-        if (eurofighter.pilonDerecho.misiles != null) {
-            g2.setColor(Color.red);
-            g2.fillRect(400, 470, 260, 40);
-            g2.setColor(Color.black);
-            g2.drawString(String.format(cantidadMisilesIzquierda, "Cantidad de Bombas P1:  %.3d"), 430, 495);
-        }
-
+        // Pylon Izquierdo
         if (eurofighter.pilonIzquierdo.misiles != null) {
-            g2.setColor(Color.red);
-            g2.fillRect(400, 570, 260, 40);
-            g2.setColor(Color.black);
-            g2.drawString(String.format(cantidadMisilesDerecha, "Cantidad de Bombas P2:  %.3d"), 430, 595);
+            g2.setColor(Color.decode("#1e1e1e"));
+            g2.fillRect(430, 340, 260, 40);
+
+            g2.setColor(Color.WHITE);
+            g2.drawRect(430, 340, 260, 40);
+
+            g2.setColor(Color.WHITE);
+            g2.drawString("Left Pylon: " + String.format(cantidadMisilesIzquierda, "Cantidad de Bombas P1:  %.3d"), 460, 365);
         }
 
-        if (eurofighter.pilonDerecho.bombs != null) {
-            g2.setColor(Color.red);
-            g2.fillRect(400, 670, 260, 40);
-            g2.setColor(Color.black);
-            g2.drawString(String.format(cantidadBombasIzquierda, "Cantidad de Bombas P1:  %.3d"), 430, 695);
+        // Pilon central
+        if (eurofighter.pilonCentral.misiles != null) {
+            g2.setColor(Color.decode("#1e1e1e"));
+            g2.fillRect(430, 390, 260, 40);
+
+            g2.setColor(Color.WHITE);
+            g2.drawRect(430, 390, 260, 40);
+
+            g2.setColor(Color.WHITE);
+            g2.drawString("Middle Pylon: " + String.format(cantidadMisilesCentro, "Cantidad de Bombas P2:  %.3d"), 460, 415);
         }
 
+        // Pylon Derecho
+        if (eurofighter.pilonDerecho.misiles != null) {
+            g2.setColor(Color.decode("#1e1e1e"));
+            g2.fillRect(430, 440, 260, 40);
+
+            g2.setColor(Color.WHITE);
+            g2.drawRect(430, 440, 260, 40);
+
+            g2.setColor(Color.WHITE);
+            g2.drawString("Right Pylon: " + String.format(cantidadMisilesDerecha, "Cantidad de Bombas P2:  %.3d"), 460, 465);
+        }
+
+        // Pylon Izquierdo (Bombas)
         if (eurofighter.pilonIzquierdo.bombs != null) {
-            g2.setColor(Color.red);
-            g2.fillRect(400, 770, 260, 40);
-            g2.setColor(Color.black);
-            g2.drawString(String.format(cantidadBombasDerecha, "Cantidad de Bombas P2:  %.3d"), 430, 795);
+            g2.setColor(Color.decode("#1e1e1e"));
+            g2.fillRect(730, 340, 260, 40);
+
+            g2.setColor(Color.WHITE);
+            g2.drawRect(730, 340, 260, 40);
+
+            g2.setColor(Color.WHITE);
+            g2.drawString("Left Pylon: " + String.format(cantidadBombasIzquierda, "Cantidad de Bombas P1:  %.3d"), 760, 365);
+        }
+        if (eurofighter.pilonCentral.bombs != null) {
+            g2.setColor(Color.decode("#1e1e1e"));
+            g2.fillRect(730, 390, 260, 40);
+
+            g2.setColor(Color.WHITE);
+            g2.drawRect(730, 390, 260, 40);
+
+            g2.setColor(Color.WHITE);
+            g2.drawString("Center Pylon: " + String.format(cantidadBombasCentro, "Cantidad de Bombas P1:  %.3d"), 760, 415);
+        }
+        if (eurofighter.pilonDerecho.bombs != null) {
+            g2.setColor(Color.decode("#1e1e1e"));
+            g2.fillRect(730, 430, 260, 40);
+
+            g2.setColor(Color.WHITE);
+            g2.drawRect(730, 430, 260, 40);
+
+            g2.setColor(Color.WHITE);
+            g2.drawString("Right Pylon: " + String.format(cantidadBombasCentro, "Cantidad de Bombas P1:  %.3d"), 760, 455);
         }
 
+        // Cannon
+        g2.setColor(Color.decode("#1e1e1e"));
+        g2.fillRect(1030, 340, 260, 40);
 
-            g2.setColor(Color.red);
-            g2.fillRect(700, 770, 260, 40);
-            g2.setColor(Color.black);
-            g2.drawString(String.format("%d", eurofighter.cannon.amo), 730, 795);
+        g2.setColor(Color.WHITE);
+        g2.drawRect(1030, 340, 260, 40);
 
+        g2.setColor(Color.WHITE);
+        g2.drawString(String.format("%d", eurofighter.cannon.amo) + " Remaining", 1060, 365);
+
+        if (eurofighter.cannon.estado) {
+            g2.setColor(Color.decode("#b2f2bb"));
+            g2.fillRect(1030, 390, 260, 40);
+
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.drawRect(1030, 390, 260, 40);
+
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.drawString("SHOOTING", 1060, 415);
+        }
 
         g2.dispose();
     }
@@ -375,11 +496,16 @@ public class SimLoop extends JPanel implements Runnable {
         eurofighter.pilonIzquierdo.loadMisile(eurofighter.misile3);
         eurofighter.pilonIzquierdo.loadBomb(eurofighter.bomb1);
 
+        eurofighter.pilonCentral.loadMisile(eurofighter.misile11);
+        eurofighter.pilonCentral.loadMisile(eurofighter.misile12);
+        eurofighter.pilonCentral.loadMisile(eurofighter.misile13);
+        eurofighter.pilonCentral.loadMisile(eurofighter.misile14);
+        eurofighter.pilonCentral.loadBomb(eurofighter.bomb11);
+
         eurofighter.pilonDerecho.loadMisiles(eurofighter.misile5);
         eurofighter.pilonDerecho.loadMisiles(eurofighter.misile6);
         eurofighter. pilonDerecho.loadMisiles(eurofighter.misile7);
         eurofighter.pilonDerecho.loadBomb(eurofighter.bomb2);
-
 
         while (running) {
             long startTime = System.currentTimeMillis();
@@ -387,6 +513,7 @@ public class SimLoop extends JPanel implements Runnable {
             //actualizar informacion
             updateInfo();
             checkLeftLaunch();
+            checkMiddleLaunch();
             checkRightLaunch();
             checkIfShot();
             log();

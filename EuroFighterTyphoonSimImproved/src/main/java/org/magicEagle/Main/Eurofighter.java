@@ -42,6 +42,12 @@ public class Eurofighter {
     public Bomb bomb2 = new Bomb("Bomb 2", "Bomb", 1000, "Guidance", 1000, 100, 1000, 1000, 100, false, this.keyHandler);
     public Cannon cannon = new Cannon(this.keyHandler, false);
 
+    public Misile misile11 = new Misile("Misile 11", "Misile", 1000, "Guidance", "Aspect", 100, 1000, 1000, 100, 100, 100, this.keyHandler, false);
+    public Misile misile12 = new Misile("Misile 12", "Misile", 1000, "Guidance", "Aspect", 100, 1000, 1000, 100, 100, 100, this.keyHandler, false);
+    public Misile misile13 =  new Misile("Misile 13", "Misile", 1000, "Guidance", "Aspect", 100, 1000, 1000, 100, 100, 100, this.keyHandler, false);
+    public Misile misile14 =  new Misile("Misile 14", "Misile", 1000, "Guidance", "Aspect", 100, 1000, 1000, 100, 100, 100, this.keyHandler, false);
+    public Bomb bomb11 = new Bomb("Bomb 11", "Bomb", 1000, "Guidance", 1000, 100, 1000, 1000, 100, false, this.keyHandler);
+
     public PilonDerecho pilonDerecho = new PilonDerecho();
     public PilonIzquierdo pilonIzquierdo = new PilonIzquierdo();
     public PilonCentral pilonCentral = new PilonCentral();
