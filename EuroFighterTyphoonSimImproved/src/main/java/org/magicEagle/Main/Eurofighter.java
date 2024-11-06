@@ -1,15 +1,12 @@
 package org.magicEagle.Main;
 
+import org.magicEagle.plane.*;
 import org.magicEagle.plane.Armamento.Bomb;
 import org.magicEagle.plane.Armamento.Cannon;
 import org.magicEagle.plane.Armamento.Misile;
 import org.magicEagle.plane.Armamento.bahiaArmas.PilonCentral;
 import org.magicEagle.plane.Armamento.bahiaArmas.PilonDerecho;
 import org.magicEagle.plane.Armamento.bahiaArmas.PilonIzquierdo;
-import org.magicEagle.plane.Combustible;
-import org.magicEagle.plane.Motor;
-import org.magicEagle.plane.SistemaRefrigeracion;
-import org.magicEagle.plane.SistemaSensores;
 import org.magicEagle.utils.KeyHandler;
 import org.magicEagle.utils.Logs;
 
@@ -29,6 +26,7 @@ public class Eurofighter {
     public Combustible combustible = new Combustible(5000, 5000, "SAF",this.motor.getConmsumoCombustible());
     public SistemaSensores sistemaSensores = new SistemaSensores(0, 0, "Sensor de Peso encendido", this.motor.getTemperatura(), this, this.combustible, 4, this.motor);
     public SistemaRefrigeracion sistemaRefrigeracion = new SistemaRefrigeracion(this.motor, this.sistemaSensores);
+    public SistemaElectrico sistemaElectrico = new SistemaElectrico();
     public Logs logs = new Logs(this.motor, this.combustible, this.sistemaSensores, this.sistemaRefrigeracion);
     public Misile misile1 = new Misile("Misile 1", "Misile", 1000, "Guidance", "Aspect", 100, 1000, 1000, 100, 100, 100, this.keyHandler, false);
     public Misile misile2 = new Misile("Misile 2", "Misile", 1000, "Guidance", "Aspect", 100, 1000, 1000, 100, 100, 100, this.keyHandler, false);

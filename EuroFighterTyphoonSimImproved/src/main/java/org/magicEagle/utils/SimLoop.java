@@ -7,13 +7,15 @@ import java.awt.FontFormatException;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.magicEagle.Main.Eurofighter;
 
@@ -60,8 +62,21 @@ public class SimLoop extends JPanel implements Runnable {
         this.addKeyListener(eurofighter.keyHandler);
         this.setFocusable(true);
         this.requestFocus();
-    }
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int x = e.getX();
+                int y = e.getY();
 
+                System.out.println("X: " + x + " Y: " + y);
+                //95, 300 + 30
+                //detectar su el click ocurrio en el boton de encender la unidad electrica
+                if (x >= 95 && x <= 355 && y >= 300 + 30 && y <= 340 + 60) {
+                    eurofighter.sistemaElectrico.startElectricUnit();
+                }
+            }
+        });
+    }
 
     /**
      * Updates the information of various components in the simulation.
@@ -164,7 +179,6 @@ public class SimLoop extends JPanel implements Runnable {
             eurofighter.bomb11.actualizarEstado();
         }
     }
-
     /**
      * Paints the components of the simulation loop panel.
      * This method paints the speed, power, fuel, temperature, cooling, and missile data.
@@ -252,10 +266,17 @@ public class SimLoop extends JPanel implements Runnable {
 
         g2.drawImage(image, 700, 50, 560, 300, this);
 
-        g2.setColor(Color.decode("#ffd43b"));
-        g2.fillRect(95, 300 + 30, 260, 40);
-        g2.setColor(Color.black);
-        g2.drawString("START ELECTRIC UNIT", 141, 325 + 30);
+        if (!eurofighter.sistemaElectrico.sistemaElectrico){
+            g2.setColor(Color.decode("#ffd43b"));
+            g2.fillRect(95, 300 + 30, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString("START ELECTRIC UNIT", 141, 325 + 30);
+        } else {
+            g2.setColor(Color.decode("#fc090f"));
+            g2.fillRect(95, 300 + 30, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString("SHUT DOWN ELECTRIC UNIT", 120, 325 + 30);
+        }
 
         // Sexto rectángulo (verde)
         g2.setColor(Color.decode("#69db7c"));
@@ -484,7 +505,6 @@ public class SimLoop extends JPanel implements Runnable {
      * logs, and repaints the simulation loop panel. It also stops the simulation loop
      * if the close button is pressed.
      */
-
     @Override
     public void run() {
 
