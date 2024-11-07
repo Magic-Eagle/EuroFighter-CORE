@@ -1,12 +1,6 @@
 package org.magicEagle.utils;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -73,6 +67,39 @@ public class SimLoop extends JPanel implements Runnable {
                 //detectar su el click ocurrio en el boton de encender la unidad electrica
                 if (x >= 95 && x <= 355 && y >= 300 + 30 && y <= 340 + 60) {
                     eurofighter.sistemaElectrico.startElectricUnit();
+                    if (!eurofighter.sistemaElectrico.sistemaElectrico) {
+                        eurofighter.sistemaElectrico.lucesDeCabina = false;
+                        eurofighter.sistemaElectrico.formationLights = false;
+                        eurofighter.sistemaElectrico.taxingLights = false;
+                        eurofighter.sistemaElectrico.anticolisionLights = false;
+                    }
+                }
+
+                //Taxi lights 220, 550
+                if (x >= 220 && x <= 390 && y >= 550 && y <= 580 && eurofighter.sistemaElectrico.sistemaElectrico) {
+                    eurofighter.sistemaElectrico.startTaxingLights();
+                    if (eurofighter.sistemaElectrico.formationLights || eurofighter.sistemaElectrico.anticolisionLights) {
+                        eurofighter.sistemaElectrico.formationLights = false;
+                        eurofighter.sistemaElectrico.anticolisionLights = false;
+                    }
+                }
+
+                //formacion (395, 550, 120, 30)
+                if (x >= 395 - 15 && x <= 515 - 15 && y >= 550 && y <= 580 && eurofighter.sistemaElectrico.sistemaElectrico) {
+                    eurofighter.sistemaElectrico.startFormationLights();
+                    if (eurofighter.sistemaElectrico.taxingLights || eurofighter.sistemaElectrico.anticolisionLights) {
+                        eurofighter.sistemaElectrico.taxingLights = false;
+                        eurofighter.sistemaElectrico.anticolisionLights = false;
+                    }
+                }
+
+                //Anticolision (520 - 15, 550, 125, 30)
+                if (x >= 520 - 15 && x <= 645 - 15 && y >= 550 && y <= 580 && eurofighter.sistemaElectrico.sistemaElectrico) {
+                    eurofighter.sistemaElectrico.startAnticolisionLights();
+                    if (eurofighter.sistemaElectrico.taxingLights || eurofighter.sistemaElectrico.formationLights) {
+                        eurofighter.sistemaElectrico.taxingLights = false;
+                        eurofighter.sistemaElectrico.formationLights = false;
+                    }
                 }
             }
         });
@@ -270,12 +297,12 @@ public class SimLoop extends JPanel implements Runnable {
             g2.setColor(Color.decode("#ffd43b"));
             g2.fillRect(95, 300 + 30, 260, 40);
             g2.setColor(Color.black);
-            g2.drawString("START ELECTRIC UNIT", 141, 325 + 30);
+            g2.drawString("START BATTERY", 171, 325 + 30);
         } else {
             g2.setColor(Color.decode("#fc090f"));
             g2.fillRect(95, 300 + 30, 260, 40);
             g2.setColor(Color.black);
-            g2.drawString("SHUT DOWN ELECTRIC UNIT", 120, 325 + 30);
+            g2.drawString("SHUT DOWN BATTERY", 150, 325 + 30);
         }
 
         // Sexto rectángulo (verde)
@@ -289,6 +316,82 @@ public class SimLoop extends JPanel implements Runnable {
         g2.fillRect(95, 440 + 30, 260, 40);
         g2.setColor(Color.black);
         g2.drawString("SHUT DOWN ENGINE", 145, 465 + 30);
+
+
+        g2.setColor(Color.decode("#FFFFFF"));
+        g2.drawRect(95, 550, 100, 30);
+
+        g2.drawRect(95, 550, 70, 30);
+
+        g2.drawString("Battery", 105, 570);
+        g2.setColor(Color.decode("#FFFFFF"));
+
+        if (eurofighter.sistemaElectrico.sistemaElectrico) {
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.fillOval(170, 555, 20, 20);
+        } else {
+            g2.setColor(Color.decode("#e03131"));
+            g2.fillOval(170, 555, 20, 20);
+        }
+
+        g2.setColor(Color.decode("#FFFFFF"));
+        g2.drawRect(220, 550, 155, 30);
+
+        g2.setColor(Color.decode("#FFFFFF"));
+        g2.drawRect(220, 550, 125, 30);
+        g2.drawString("Taxing/Landing", 230, 570);
+
+
+        if (!eurofighter.sistemaElectrico.sistemaElectrico) {
+            g2.setColor(Color.decode("#9c36b5"));
+            g2.fillOval(350, 555, 20, 20);
+        } else if (!eurofighter.sistemaElectrico.taxingLights){
+            g2.setColor(Color.decode("#e03131"));
+            g2.fillOval(350, 555, 20, 20);
+        } else {
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.fillOval(350, 555, 20, 20);
+        }
+
+        g2.setColor(Color.decode("#FFFFFF"));
+        g2.drawRect(395 - 15, 550, 120, 30);
+
+        g2.setColor(Color.decode("#FFFFFF"));
+        g2.drawRect(395 - 15, 550, 90, 30);
+        g2.drawString("Formation", 405 - 15, 570);
+
+
+        if (!eurofighter.sistemaElectrico.sistemaElectrico) {
+            g2.setColor(Color.decode("#9c36b5"));
+            g2.fillOval(490 - 15, 555, 20, 20);
+        } else if (!eurofighter.sistemaElectrico.formationLights){
+            g2.setColor(Color.decode("#e03131"));
+            g2.fillOval(490 - 15, 555, 20, 20);
+        } else {
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.fillOval(490 - 15, 555, 20, 20);
+        }
+
+        g2.setColor(Color.decode("#FFFFFF"));
+        g2.drawRect(520 - 15, 550, 125, 30);
+
+        g2.setColor(Color.decode("#FFFFFF"));
+        g2.drawRect(520 - 15, 550, 100, 30);
+        g2.drawString("Anticolision", 530 - 15, 570);
+
+        //9c36b5
+
+        if (!eurofighter.sistemaElectrico.sistemaElectrico) {
+            g2.setColor(Color.decode("#9c36b5"));
+            g2.fillOval(622 - 15, 555, 20, 20);
+        } else if (!eurofighter.sistemaElectrico.anticolisionLights){
+            g2.setColor(Color.decode("#e03131"));
+            g2.fillOval(622 - 15, 555, 20, 20);
+        } else {
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.fillOval(622 - 15, 555, 20, 20);
+        }
+
 
         g2.setColor(Color.WHITE);
         g2.drawString("Misiles", 430, 325);
