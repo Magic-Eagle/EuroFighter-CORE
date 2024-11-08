@@ -10,6 +10,7 @@ public abstract class Armamento {
     private long launchTime = 0;
     public boolean launched = false;
 
+
     /**
      * Gets the type of the armament.
      *

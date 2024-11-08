@@ -22,11 +22,11 @@ public class Eurofighter {
      * Declaring the components and systems of the Eurofighter.
      */
     public KeyHandler keyHandler = new KeyHandler();
-    public Motor motor =  new Motor(150000, 0, "Encendido", 0, this.keyHandler);
+    public SistemaElectrico sistemaElectrico = new SistemaElectrico();
+    public Motor motor =  new Motor(150000, 0, "Encendido", 0, this.keyHandler, this.sistemaElectrico);
     public Combustible combustible = new Combustible(5000, 5000, "SAF",this.motor.getConmsumoCombustible());
     public SistemaSensores sistemaSensores = new SistemaSensores(0, 0, "Sensor de Peso encendido", this.motor.getTemperatura(), this, this.combustible, 4, this.motor);
     public SistemaRefrigeracion sistemaRefrigeracion = new SistemaRefrigeracion(this.motor, this.sistemaSensores);
-    public SistemaElectrico sistemaElectrico = new SistemaElectrico();
     public Logs logs = new Logs(this.motor, this.combustible, this.sistemaSensores, this.sistemaRefrigeracion);
     public Misile misile1 = new Misile("Misile 1", "Misile", 1000, "Guidance", "Aspect", 100, 1000, 1000, 100, 100, 100, this.keyHandler, false);
     public Misile misile2 = new Misile("Misile 2", "Misile", 1000, "Guidance", "Aspect", 100, 1000, 1000, 100, 100, 100, this.keyHandler, false);

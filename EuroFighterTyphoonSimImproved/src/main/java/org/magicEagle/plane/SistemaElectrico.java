@@ -1,11 +1,18 @@
 package org.magicEagle.plane;
 
 public class SistemaElectrico {
+
     public boolean sistemaElectrico = false;
+    public boolean APU = false;
+
     public boolean lucesDeCabina = false;
     public boolean taxingLights = false;
     public boolean formationLights = false;
     public boolean anticolisionLights = false;
+
+    public void startAPU() {
+        APU = !APU;
+    }
 
     public void startElectricUnit() {
         sistemaElectrico = !sistemaElectrico;

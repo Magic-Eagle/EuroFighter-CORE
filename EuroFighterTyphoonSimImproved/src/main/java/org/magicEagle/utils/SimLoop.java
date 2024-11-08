@@ -66,13 +66,33 @@ public class SimLoop extends JPanel implements Runnable {
                 //95, 300 + 30
                 //detectar su el click ocurrio en el boton de encender la unidad electrica
                 if (x >= 95 && x <= 355 && y >= 300 + 30 && y <= 340 + 60) {
-                    eurofighter.sistemaElectrico.startElectricUnit();
+                    if (!eurofighter.motor.startEngine) {
+                        
+                    }
                     if (!eurofighter.sistemaElectrico.sistemaElectrico) {
                         eurofighter.sistemaElectrico.lucesDeCabina = false;
                         eurofighter.sistemaElectrico.formationLights = false;
                         eurofighter.sistemaElectrico.taxingLights = false;
                         eurofighter.sistemaElectrico.anticolisionLights = false;
+                        eurofighter.sistemaElectrico.APU = false;
+                        eurofighter.motor.startEngine = false;
+                        eurofighter.motor.startGenerator = false;
+                        eurofighter.motor.genMode = false;
                     }
+                }
+
+                //Start Engine (95, 370 + 30, 260, 40)
+                if (x >= 95 && x <= 355 && y >= 370 + 30 && y <= 410 + 30 && eurofighter.sistemaElectrico.sistemaElectrico && eurofighter.sistemaElectrico.APU) {
+                    eurofighter.motor.StartEngine();
+                }
+                //Start Generator (95, 440 + 30, 260, 40)
+                if (x >= 95 && x <= 355 && y >= 440 + 30 && y <= 480 + 30 && eurofighter.sistemaElectrico.sistemaElectrico && eurofighter.sistemaElectrico.APU) {
+                    eurofighter.motor.StartGenerator();
+                }
+
+                //Gen Mode (95, 510 + 30, 260, 40) 95, 240, 60, 60
+                if (x >= 95 && x <= 155 && y >= 240 && y <= 300 && eurofighter.sistemaElectrico.sistemaElectrico && eurofighter.sistemaElectrico.APU && eurofighter.motor.startEngine) {
+                    eurofighter.motor.GenMode();
                 }
 
                 //Taxi lights 220, 550
@@ -100,6 +120,11 @@ public class SimLoop extends JPanel implements Runnable {
                         eurofighter.sistemaElectrico.taxingLights = false;
                         eurofighter.sistemaElectrico.formationLights = false;
                     }
+                }
+
+                //APU (95, 600, 100, 30)
+                if (x >= 95 && x <= 195 && y >= 600 && y <= 630 && eurofighter.sistemaElectrico.sistemaElectrico) {
+                    eurofighter.sistemaElectrico.startAPU();
                 }
             }
         });
@@ -253,69 +278,167 @@ public class SimLoop extends JPanel implements Runnable {
 
         g2.setColor(Color.white);
         g2.drawString("Velocidad", 120, 95);
+        if (!eurofighter.sistemaElectrico.APU) {
+            g2.setColor(Color.decode("#e03131"));
+            g2.fillOval(270, 85, 10, 10);
 
-        g2.setColor(Color.white);
-        g2.fillRect(120, 110, 160, 40);
-        g2.setColor(Color.black);
-        g2.drawString(String.format(velocidad,"%.3f" ), 150, 135);
+            g2.setColor(Color.white);
+            g2.fillRect(120, 110, 160, 40);
+            g2.setColor(Color.black);
+            g2.drawString("APU OFF", 150, 135);
+        } else {
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.fillOval(270, 85, 10, 10);
+
+            g2.setColor(Color.white);
+            g2.fillRect(120, 110, 160, 40);
+            g2.setColor(Color.black);
+            g2.drawString(String.format(velocidad,"%.3f" ), 150, 135);
+        }
+
 
         g2.setColor(Color.white);
         g2.drawString("Potencia", 300, 95);
+        if (!eurofighter.sistemaElectrico.APU) {
+            g2.setColor(Color.decode("#e03131"));
+            g2.fillOval(450, 85, 10, 10);
 
-        g2.setColor(Color.white);
-        g2.fillRect(300, 110, 160, 40);
-        g2.setColor(Color.black);
-        g2.drawString(String.format(potencia, "%.3f"), 330, 135);
+            g2.setColor(Color.white);
+            g2.fillRect(300, 110, 160, 40);
+            g2.setColor(Color.black);
+            g2.drawString("APU OFF", 330, 135);
+        } else if (eurofighter.sistemaElectrico.APU && eurofighter.motor.startEngine) {
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.fillOval(450, 85, 10, 10);
+
+            g2.setColor(Color.white);
+            g2.fillRect(300, 110, 160, 40);
+            g2.setColor(Color.black);
+            g2.drawString(String.format(potencia, "%.3f"), 330, 135);
+        } else if (eurofighter.sistemaElectrico.APU) {
+            g2.setColor(Color.decode("#f08c00"));
+            g2.fillOval(450, 85, 10, 10);
+
+            g2.setColor(Color.white);
+            g2.fillRect(300, 110, 160, 40);
+            g2.setColor(Color.black);
+            g2.drawString(String.format(potencia, "%.3f"), 330, 135);
+        }
 
         g2.setColor(Color.white);
         g2.drawString("Combustible", 480, 95);
-
-        g2.setColor(Color.white);
-        g2.fillRect(480, 110, 160, 40);
-        g2.setColor(Color.black);
-        g2.drawString(String.format(combustibleString, "%.3f"), 510, 135);
+        if(!eurofighter.sistemaElectrico.APU) {
+            g2.setColor(Color.decode("#e03131"));
+            g2.fillOval(630, 85, 10, 10);
+            g2.setColor(Color.white);
+            g2.fillRect(480, 110, 160, 40);
+            g2.setColor(Color.black);
+            g2.drawString("APU OFF", 510, 135);
+        } else {
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.fillOval(630, 85, 10, 10);
+            g2.setColor(Color.white);
+            g2.fillRect(480, 110, 160, 40);
+            g2.setColor(Color.black);
+            g2.drawString(String.format(combustibleString, "%.3f"), 510, 135);
+        }
 
         g2.setColor(Color.white);
         g2.drawString("Temperatura", 188, 240);
-
-        g2.setColor(Color.white);
-        g2.fillRect(188, 250, 160, 40);
-        g2.setColor(Color.black);
-        g2.drawString(String.format(temperatura, "%.2f"), 218, 275);
+        if (!eurofighter.sistemaElectrico.APU) {
+            g2.setColor(Color.decode("#e03131"));
+            g2.fillOval(338, 230, 10, 10);
+            g2.setColor(Color.white);
+            g2.fillRect(188, 250, 160, 40);
+            g2.setColor(Color.black);
+            g2.drawString("APU OFF", 218, 275);
+        }else if (eurofighter.sistemaElectrico.APU && eurofighter.motor.startEngine) {
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.fillOval(338, 230, 10, 10);
+            g2.setColor(Color.white);
+            g2.fillRect(188, 250, 160, 40);
+            g2.setColor(Color.black);
+            g2.drawString(String.format(temperatura, "%.2f"), 218, 275);
+        }else if (eurofighter.sistemaElectrico.APU){
+            g2.setColor(Color.decode("#f08c00"));
+            g2.fillOval(338, 230, 10, 10);
+            g2.setColor(Color.white);
+            g2.fillRect(188, 250, 160, 40);
+            g2.setColor(Color.black);
+            g2.drawString(String.format(temperatura, "%.2f"), 218, 275);
+        }
 
         g2.setColor(Color.white);
         g2.drawString("Refrigeracion", 388, 240);
-
-        g2.setColor(Color.white);
-        g2.fillRect(388, 250, 160, 40);
-        g2.setColor(Color.black);
-        g2.drawString("100%", 418, 275);
+        if(!eurofighter.sistemaElectrico.APU) {
+            g2.setColor(Color.decode("#e03131"));
+            g2.fillOval(538, 230, 10, 10);
+            g2.setColor(Color.white);
+            g2.fillRect(388, 250, 160, 40);
+            g2.setColor(Color.black);
+            g2.drawString("APU OFF", 418, 275);
+        } else {
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.fillOval(538, 230, 10, 10);
+            g2.setColor(Color.white);
+            g2.fillRect(388, 250, 160, 40);
+            g2.setColor(Color.black);
+            g2.drawString("100%", 418, 275);
+        }
 
         g2.drawImage(image, 700, 50, 560, 300, this);
 
+        if (!eurofighter.motor.genMode) {
+            g2.setColor(Color.decode("#fd7e14"));
+            g2.fillRect(95, 240, 60, 60);
+            g2.setColor(Color.black);
+            g2.drawString("GEN", 110, 265);
+            g2.drawString("MODE", 105, 285);
+        } else {
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.fillRect(95, 240, 60, 60);
+            g2.setColor(Color.black);
+            g2.drawString("TURN", 110, 265);
+            g2.drawString("OFF", 105, 285);
+        }
+
         if (!eurofighter.sistemaElectrico.sistemaElectrico){
-            g2.setColor(Color.decode("#ffd43b"));
+            g2.setColor(Color.decode("#228be6"));
             g2.fillRect(95, 300 + 30, 260, 40);
             g2.setColor(Color.black);
             g2.drawString("START BATTERY", 171, 325 + 30);
         } else {
-            g2.setColor(Color.decode("#fc090f"));
+            g2.setColor(Color.decode("#e03131"));
             g2.fillRect(95, 300 + 30, 260, 40);
             g2.setColor(Color.black);
             g2.drawString("SHUT DOWN BATTERY", 150, 325 + 30);
         }
 
         // Sexto rectángulo (verde)
-        g2.setColor(Color.decode("#69db7c"));
-        g2.fillRect(95, 370 + 30, 260, 40);
-        g2.setColor(Color.black);
-        g2.drawString("START ENGINE", 170, 395 + 30);
+        if (!eurofighter.motor.startEngine) {
+            g2.setColor(Color.decode("#9775fa"));
+            g2.fillRect(95, 370 + 30, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString("START ENGINE", 170, 395 + 30);
+        } else {
+            g2.setColor(Color.decode("#e03131"));
+            g2.fillRect(95, 370 + 30, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString("SHUT DOWN ENGINE", 150, 395 + 30);
+        }
 
         // Séptimo rectángulo (rosa)
-        g2.setColor(Color.decode("#da77f2"));
-        g2.fillRect(95, 440 + 30, 260, 40);
-        g2.setColor(Color.black);
-        g2.drawString("SHUT DOWN ENGINE", 145, 465 + 30);
+        if (!eurofighter.motor.startGenerator) {
+            g2.setColor(Color.decode("#fab005"));
+            g2.fillRect(95, 440 + 30, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString("START GENERATOR", 155, 465 + 30);
+        } else {
+            g2.setColor(Color.decode("#e03131"));
+            g2.fillRect(95, 440 + 30, 260, 40);
+            g2.setColor(Color.black);
+            g2.drawString("SHUT DOWN GENERATOR", 150, 465 + 30);
+        }
 
 
         g2.setColor(Color.decode("#FFFFFF"));
@@ -390,6 +513,25 @@ public class SimLoop extends JPanel implements Runnable {
         } else {
             g2.setColor(Color.decode("#2f9e44"));
             g2.fillOval(622 - 15, 555, 20, 20);
+        }
+
+        g2.setColor(Color.decode("#FFFFFF"));
+        g2.drawRect(95, 600, 100, 30);
+
+        g2.drawRect(95, 600, 70, 30);
+
+        g2.drawString("APU", 105, 620);
+        g2.setColor(Color.decode("#FFFFFF"));
+
+        if (!eurofighter.sistemaElectrico.sistemaElectrico) {
+            g2.setColor(Color.decode("#9c36b5"));
+            g2.fillOval(170, 605, 20, 20);
+        } else if (eurofighter.sistemaElectrico.APU){
+            g2.setColor(Color.decode("#2f9e44"));
+            g2.fillOval(170, 605, 20, 20);
+        } else {
+            g2.setColor(Color.decode("#e03131"));
+            g2.fillOval(170, 605, 20, 20);
         }
 
 

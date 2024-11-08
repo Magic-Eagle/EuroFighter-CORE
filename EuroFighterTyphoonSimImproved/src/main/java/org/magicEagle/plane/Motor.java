@@ -7,6 +7,7 @@ import org.magicEagle.utils.KeyHandler;
  */
 public class Motor {
     KeyHandler keyHandler;
+    SistemaElectrico sistemaElectrico;
 
     double potenciaIntervalo = 90;
     double potenciaMaxima;
@@ -15,6 +16,9 @@ public class Motor {
     double temperatura;
     double conmsumoCombustible;
 
+    public boolean startEngine = false;
+    public boolean startGenerator = false;
+    public boolean genMode = false;
     /**
      * Constructor to initialize the Motor object.
      *
@@ -24,12 +28,13 @@ public class Motor {
      * @param conmsumoCombustible  the fuel consumption of the motor
      * @param keyHandler           the key handler for controlling the motor
      */
-    public Motor(double potenciaMaxima, double nivelActualPotencia, String Estado, double conmsumoCombustible, KeyHandler keyHandler) {
+    public Motor(double potenciaMaxima, double nivelActualPotencia, String Estado, double conmsumoCombustible, KeyHandler keyHandler, SistemaElectrico sistemaElectrico) {
         this.potenciaMaxima = potenciaMaxima;
         this.nivelActualPotencia = nivelActualPotencia;
         this.Estado = Estado;
         this.conmsumoCombustible = conmsumoCombustible;
         this.keyHandler = keyHandler;
+        this.sistemaElectrico = sistemaElectrico;
     }
     /**
      * @Author: CoderAnchel
@@ -44,17 +49,25 @@ public class Motor {
      */
     public void ajustarPotencia() {
 
-        if (nivelActualPotencia <= potenciaMaxima) {
+        if (genMode) {
+            nivelActualPotencia = 100;
+        }
+
+        if (nivelActualPotencia <= potenciaMaxima && startEngine) {
 
             if (keyHandler.upPressed) {
                 nivelActualPotencia =nivelActualPotencia + potenciaIntervalo;
             }
         }
 
-        if (nivelActualPotencia >= 0) {
+        if (nivelActualPotencia >= 0 && startEngine) {
             if(keyHandler.downPressed) {
                 nivelActualPotencia = nivelActualPotencia - potenciaIntervalo;
             }
+        }
+
+        if (!this.startEngine) {
+            nivelActualPotencia = 0;
         }
     }
     /**
@@ -93,6 +106,10 @@ public class Motor {
         if(nivelActualPotencia > 0) {
             temperatura = nivelActualPotencia / 200;
         }
+
+        if (nivelActualPotencia == 0) {
+            temperatura = 0;
+        }
     }
 
     /**
@@ -121,4 +138,28 @@ public class Motor {
     public void ajustarConsumo() {
         this.conmsumoCombustible = (nivelActualPotencia / 300) / 7225;
     }
+
+    public void StartEngine() {
+            startEngine = !startEngine;
+
+            if (!startEngine) {
+                nivelActualPotencia = 0;
+                startGenerator = false;
+                genMode = false;
+            }
+    }
+
+    public void StartGenerator() {
+        if (startEngine && this.nivelActualPotencia > 99) {
+            startGenerator = !startGenerator;
+        }
+    }
+
+    public void GenMode() {
+        //ajustar modo de generacion inicial para sistemas
+        if (startEngine) {
+            genMode = !genMode;
+        }
+    }
+
 }
