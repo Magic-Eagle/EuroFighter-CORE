@@ -2,6 +2,12 @@
 ![Image](https://github.com/user-attachments/assets/ce79d8a6-b4cb-4c21-86b0-9f24b675107b)
 **Simulación del Núcleo del EuroFighter Typhoon**. Este proyecto se dedica a desarrollar el software central del EuroFighter Typhoon, enfocándonos únicamente en los sistemas internos del caza sin incluir factores externos como la **física ambiental, mapas o condiciones atmosféricas.** El objetivo es **simular con alta fidelidad las funcionalidades y los sistemas internos del EuroFighter Typhoon**.
 
+
+
+https://github.com/user-attachments/assets/9937ecf8-d727-4e02-9910-4a4fc6192416
+
+
+
 ## **Descripción del Proyecto**
 Este proyecto forma parte de la iniciativa más amplia **Proyecto MagicEagle**, donde buscamos construir una simulación realista y modular del EuroFighter Typhoon. En esta etapa, nos centramos en **perfeccionar los sistemas internos** y la **lógica del caza** de forma independiente.
 
